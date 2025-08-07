@@ -254,9 +254,16 @@ for bucket in bucket_listing:
     except botocore.exceptions.ClientError as error:
         if error.response['Error']['Code'] == 'AccessDenied':
             access_issue("BucketEncryption", bucket_name)
+        elif error.response['Error']['Code'] == 'NoSuchBucket':
+            print(f"Bucket {bucket_name} does not exist, skipping.")
+            continue
         else:
             raise error
-        
+            continue
+    except botocore.exceptions.ParamValidationError as error:
+        raise error
+        print(f'Validation errors with bucket: "{bucket_name}"')    
+        continue
     
     # BPA Settings 
     try:

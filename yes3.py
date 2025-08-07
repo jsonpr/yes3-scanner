@@ -98,7 +98,7 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
 
     total_buckets = len(bucket_results)
 
-    print("Total Buckets: " + str(total_buckets))
+    print("Buckets Scanned: " + str(total_buckets))
     print("----------------------------")
 
     potentially_public = potential_public(bucket_results, account_results)
@@ -165,6 +165,7 @@ def add_to_bucket_summary(category, bucket_name):
 parser = argparse.ArgumentParser(prog='YES3 Scanner') 
 parser.add_argument("--profile")
 parser.add_argument("--region")
+parser.add_argument("--buckets", help="List of buckets to scan, comma separated and no spaces")
 
 args = parser.parse_args()
 session = boto3.Session(profile_name = args.profile)
@@ -221,11 +222,17 @@ access_issues = {}
 #Pagination is needed if quotas above 10,000
 
 try:
-    s3_buckets = s3_client.list_buckets()
+
+    if args.buckets:
+        bucket_listing = [{'Name': bucket} for bucket in args.buckets.split(',')]
+    else:
+        s3_buckets = s3_client.list_buckets()
+        bucket_listing = s3_buckets['Buckets']
+
 except botocore.exceptions.ClientError as error:
     raise error
 
-for bucket in s3_buckets['Buckets']:
+for bucket in bucket_listing:
 
     #TODO: Check Directory Buckets?
     bucket_name = bucket['Name']

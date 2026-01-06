@@ -59,6 +59,11 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
 
     #Account Results
     print("YES3 SCANNER RESULTS")
+
+    #Version check for SSE-C Encryption
+    if not (boto3.__version__ > '1.41.0'):
+        print("WARNING: boto3 version is outdated, please upgrade to version 1.41.0 or later for accurate results such as SSE-C encryption.")
+
     print("----------------------------")
     print("AWS Account: " + aws_account)
     print("Account Settings")

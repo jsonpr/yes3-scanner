@@ -133,7 +133,7 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
     print("Additional Bucket Details")
     print("Buckets with default S3-Owned Encryption: ", end="")
     print(*bucket_results_summary['BucketEncryption'], sep=', ')
-    print("Buckets without SSE-C Encryption blocked: ", end="")
+    print("\n" + "Buckets without SSE-C Encryption blocked: ", end="")
     print(*bucket_results_summary['BucketNotSSECBlocked'], sep=', ')
     print("\n" + "Buckets with a Block Public Access setting disabled: ", end="")
     print(*bucket_results_summary['BucketBPA'], sep=', ')

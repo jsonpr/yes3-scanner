@@ -4,7 +4,7 @@ YES3 scans an AWS Account for potential S3 security issues in the following cate
 
 * Access Issues such as Public Access
 * Preventative S3 Security Settings
-* Additional Security such as Encryption
+* Additional Security such as Encryption and SSE-C Encryption Blocking
 * Ransomware Protection, Data Protection, and Recovery
 
 For help or feedback, contact us at [info@fogsecurity.io](mailto:info@fogsecurity.io).  We are continuing to build in this space and are developing a more comprehensive scanner with multi-account (Organization) and object-level scanning.  If you're interested in joining a private beta, reach out to us.
@@ -34,6 +34,7 @@ YES3 Scanner checks for the following S3 configuration items:
 
 #### Additional Security
 - Bucket Encryption Settings
+- Whether a Bucket blocks SSE-C Encryption
 - S3 Server Access Logging
 
 #### Ransomware Protection & Recovery
@@ -97,6 +98,7 @@ Buckets with Access Issues: 1
 sample-locked-bucket
 ----------------------------
 Buckets with default S3-Owned Encryption: 6
+Buckets without SSE-C Encryption blocked: 1
 Buckets with a Block Public Access setting disabled: 3
 Buckets with Bucket ACLs Enabled: 2
 Buckets with ACLs set to public: 0
@@ -109,6 +111,8 @@ Buckets with Server Access Logs Disabled: 5
 ----------------------------
 Additional Bucket Details
 Buckets with default S3-Owned Encryption: sample-bucket-1, sample-bucket-2, sample-bucket-3, sample-bucket-4, sample-bucket-5, sample-bucket-6
+
+Buckets without SSE-C Encryption blocked: sample-bucket-2
 
 Buckets with a Block Public Access setting disabled: sample-bucket-1, sample-bucket-2, sample-bucket-3
 

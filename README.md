@@ -53,6 +53,8 @@ Requirements can be installed via pip3 install and the requirements.txt file. A 
 pip3 install -r requirements.txt
 ```
 
+NOTE: YES3 requires an up-to-date version of boto3 due to recent changes in S3's apis. YES3 will warn you if your version of boto3 is out of date. See requirements for version requirements.
+
 For information on configuring your AWS Credentials, see AWS's documentation [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
 
 

@@ -46,6 +46,8 @@ YES3 Scanner checks for the following S3 configuration items:
 - Python 3 and AWS's boto3 library are required.
 - AWS credentials and appropriate access are needed to run YES3.  For more information about IAM Requirements for this tool, see our [IAM documentation](iam/iam.md) which details how to install IAM for YES3 and required IAM permissions.
 
+NOTE: YES3 requires an up-to-date version of boto3 due to recent changes in S3's apis.  YES3 will warn you if your version of boto3 is out of date.  See requirements for version requirements.
+
 Requirements can be installed via pip3 install and the requirements.txt file. A python virtual environment can be used if desired.
 
 ```

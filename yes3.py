@@ -260,6 +260,23 @@ for bucket in bucket_listing:
             #Bucket uses S3 Managed (AWS Owned)
             add_to_bucket_summary("BucketEncryption", bucket_name)
             encryption_key = 'None'
+
+        blocked_encryption_types = encryption['ServerSideEncryptionConfiguration']['Rules'][0].get('BlockedEncryptionTypes')
+
+        if blocked_encryption_types:
+            blocked_encryption = blocked_encryption_types['EncryptionType'][0]
+
+            if "SSE-C" in blocked_encryption:
+                #Bucket Blocks SSE-C Encryption
+                continue
+            elif "NONE" in blocked_encryption:
+                add_to_bucket_summary("BucketNotSSECBlocked", bucket_name)
+                #Bucket does not block SSE-C Encryption
+        else:
+            #Bucket does not block SSE-C Encryption        
+            #blocked_encryption = "NONE"
+            add_to_bucket_summary("BucketNotSSECBlocked", bucket_name)
+    
     except botocore.exceptions.ClientError as error:
         if error.response['Error']['Code'] == 'AccessDenied':
             access_issue("BucketEncryption", bucket_name)

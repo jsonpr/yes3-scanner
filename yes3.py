@@ -113,6 +113,7 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
     
     print("----------------------------")
     print("Buckets with default S3-Owned Encryption: " + str(len(bucket_results_summary['BucketEncryption'])))
+    print("Buckets without SSE-C Encryption blocked: " + str(len(bucket_results_summary['BucketNotSSECBlocked'])))
     print("Buckets with a Block Public Access setting disabled: " + str(len(bucket_results_summary['BucketBPA'])))
     print("Buckets with Bucket ACLs Enabled: " + str(len(bucket_results_summary['BucketACLEnabled'])))
     print("Buckets with ACLs set to public: " + str(len(bucket_results_summary['BucketACL'])))
@@ -127,6 +128,8 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
     print("Additional Bucket Details")
     print("Buckets with default S3-Owned Encryption: ", end="")
     print(*bucket_results_summary['BucketEncryption'], sep=', ')
+    print("Buckets without SSE-C Encryption blocked: ", end="")
+    print(*bucket_results_summary['BucketNotSSECBlocked'], sep=', ')
     print("\n" + "Buckets with a Block Public Access setting disabled: ", end="")
     print(*bucket_results_summary['BucketBPA'], sep=', ')
     print("\n" + "Buckets with Bucket ACLs Enabled: ", end="")
@@ -206,6 +209,7 @@ bucket_results = []
 
 bucket_results_summary = {
     'BucketEncryption': [],
+    'BucketNotSSECBlocked': [],
     'BucketBPA': [],
     'BucketACLEnabled': [],
     'BucketACL': [],

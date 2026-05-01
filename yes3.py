@@ -417,8 +417,8 @@ for bucket in bucket_listing:
         )
 
         object_lock = object_lock_response['ObjectLockConfiguration']['ObjectLockEnabled']
-        add_to_bucket_summary("ObjectLock", bucket_name)
-        #Object lock is enabled or not present
+        if object_lock != "Enabled":
+            add_to_bucket_summary("ObjectLock", bucket_name)
     except botocore.exceptions.ClientError as error:
 
         if error.response['Error']['Code'] == 'AccessDenied':

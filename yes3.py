@@ -268,7 +268,7 @@ for bucket in bucket_listing:
 
             if "SSE-C" in blocked_encryption:
                 #Bucket Blocks SSE-C Encryption
-                continue
+                pass  
             elif "NONE" in blocked_encryption:
                 add_to_bucket_summary("BucketNotSSECBlocked", bucket_name)
                 #Bucket does not block SSE-C Encryption

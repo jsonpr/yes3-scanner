@@ -59,6 +59,11 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
 
     #Account Results
     print("YES3 SCANNER RESULTS")
+
+    #Version check for SSE-C Encryption
+    if not (boto3.__version__ > '1.41.0'):
+        print("WARNING: boto3 version is outdated, please upgrade to version 1.41.0 or later for accurate results such as SSE-C encryption.")
+
     print("----------------------------")
     print("AWS Account: " + aws_account)
     print("Account Settings")
@@ -113,6 +118,7 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
     
     print("----------------------------")
     print("Buckets with default S3-Owned Encryption: " + str(len(bucket_results_summary['BucketEncryption'])))
+    print("Buckets without SSE-C Encryption blocked: " + str(len(bucket_results_summary['BucketNotSSECBlocked'])))
     print("Buckets with a Block Public Access setting disabled: " + str(len(bucket_results_summary['BucketBPA'])))
     print("Buckets with Bucket ACLs Enabled: " + str(len(bucket_results_summary['BucketACLEnabled'])))
     print("Buckets with ACLs set to public: " + str(len(bucket_results_summary['BucketACL'])))
@@ -127,6 +133,8 @@ def summarize_results(bucket_results, account_results, bucket_results_summary):
     print("Additional Bucket Details")
     print("Buckets with default S3-Owned Encryption: ", end="")
     print(*bucket_results_summary['BucketEncryption'], sep=', ')
+    print("\n" + "Buckets without SSE-C Encryption blocked: ", end="")
+    print(*bucket_results_summary['BucketNotSSECBlocked'], sep=', ')
     print("\n" + "Buckets with a Block Public Access setting disabled: ", end="")
     print(*bucket_results_summary['BucketBPA'], sep=', ')
     print("\n" + "Buckets with Bucket ACLs Enabled: ", end="")
@@ -206,6 +214,7 @@ bucket_results = []
 
 bucket_results_summary = {
     'BucketEncryption': [],
+    'BucketNotSSECBlocked': [],
     'BucketBPA': [],
     'BucketACLEnabled': [],
     'BucketACL': [],
@@ -251,6 +260,23 @@ for bucket in bucket_listing:
             #Bucket uses S3 Managed (AWS Owned)
             add_to_bucket_summary("BucketEncryption", bucket_name)
             encryption_key = 'None'
+
+        blocked_encryption_types = encryption['ServerSideEncryptionConfiguration']['Rules'][0].get('BlockedEncryptionTypes')
+
+        if blocked_encryption_types:
+            blocked_encryption = blocked_encryption_types['EncryptionType'][0]
+
+            if "SSE-C" in blocked_encryption:
+                #Bucket Blocks SSE-C Encryption
+                continue
+            elif "NONE" in blocked_encryption:
+                add_to_bucket_summary("BucketNotSSECBlocked", bucket_name)
+                #Bucket does not block SSE-C Encryption
+        else:
+            #Bucket does not block SSE-C Encryption        
+            #blocked_encryption = "NONE"
+            add_to_bucket_summary("BucketNotSSECBlocked", bucket_name)
+    
     except botocore.exceptions.ClientError as error:
         if error.response['Error']['Code'] == 'AccessDenied':
             access_issue("BucketEncryption", bucket_name)
